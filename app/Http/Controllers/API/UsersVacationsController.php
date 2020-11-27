@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\UsersStoreRequest;
-use App\Http\Requests\UsersUpdateRequest;
-use App\Http\Resources\UserResource;
-use App\Models\User;
+use App\Http\Requests\VacationsStoreRequest;
+use App\Http\Requests\VacationsUpdateRequest;
+use App\Http\Resources\VacationResource;
+use App\Models\Vacation;
 
-class UsersController extends Controller
+class UsersVacationsController extends Controller
 {
     /**
      * Get a list of users
@@ -16,9 +15,8 @@ class UsersController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function index() {
-        $users = UserResource::collection(User::all());
-        $count = count($users);
-
+        $vacations = VacationResource::collection(Vacation::all());
+        $count = count($vacations);
         return response()->json(compact('users', 'count'));
     }
 
@@ -29,8 +27,8 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(User $user) {
-        $user = new UserResource($user);
+    public function show(Vacation $vacation) {
+        $vacation = new VacationResource($vacation);
         return response()->json(compact('user'));
     }
 
@@ -41,9 +39,9 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(UsersStoreRequest $request) {
-        $user = User::create($request->only('firstname', 'lastname', 'email', 'password'));
-        return response()->json(compact('user'), 201);
+    public function store(VacationsStoreRequest $request) {
+        $vacation = Vacation::create($request->only('from', 'to', 'user_id'));
+        return response()->json(compact('vacation'), 201);
     }
 
     /**
@@ -54,8 +52,8 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(UsersUpdateRequest $request, User $user) {
-        $user->update($request->only('firstName', 'lastName', 'email'));
+    public function update(VacationsUpdateRequest $request, Vacation $vacation) {
+        $vacation->update($request->only('from', 'to', 'user_id'));
         return response()->json(null, 204);
     }
 
@@ -67,8 +65,8 @@ class UsersController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \Exception
      */
-    public function destroy(User $user) {
-        $user->delete();
+    public function destroy(Vacation $vacation) {
+        $vacation->delete();
         return response()->json(null, 204);
     }
 }
