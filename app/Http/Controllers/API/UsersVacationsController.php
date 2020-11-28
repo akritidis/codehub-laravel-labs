@@ -6,34 +6,34 @@ use App\Http\Requests\VacationsStoreRequest;
 use App\Http\Requests\VacationsUpdateRequest;
 use App\Http\Resources\VacationResource;
 use App\Models\Vacation;
+use App\Models\User;
 
 class UsersVacationsController extends Controller
 {
     /**
-     * Get a list of users
+     * Get a list of vacations
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index() {
-        $vacations = VacationResource::collection(Vacation::all());
-        $count = count($vacations);
-        return response()->json(compact('users', 'count'));
+    public function index(User $user) {
+        $vacations = $user->vacations;
+        return response()->json(compact('vacations'));
     }
 
     /**
-     * Get a single user
+     * Get a single vacation
      *
-     * @param User $user
+     * @param Vacation $vacation
      *
      * @return \Illuminate\Http\JsonResponse
      */
     public function show(Vacation $vacation) {
         $vacation = new VacationResource($vacation);
-        return response()->json(compact('user'));
+        return response()->json(compact('vacation'));
     }
 
     /**
-     * Create a new user
+     * Create a new vacation
      *
      * @param StoreRequest $request
      *
@@ -45,10 +45,10 @@ class UsersVacationsController extends Controller
     }
 
     /**
-     * Update a specific user
+     * Update a specific vacation
      *
      * @param UpdateRequest $request
-     * @param User    $user
+     * @param Vacation    $vacation
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -58,9 +58,9 @@ class UsersVacationsController extends Controller
     }
 
     /**
-     * Delete a specific user
+     * Delete a specific vacation
      *
-     * @param User $user
+     * @param Vacation $vacation
      *
      * @return \Illuminate\Http\JsonResponse
      * @throws \Exception

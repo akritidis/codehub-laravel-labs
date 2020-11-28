@@ -9,6 +9,15 @@ class Skill extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'title'
+    ];
+
     public function users(){
         return $this->belongsToMany('App\Models\User','users_skills');
     }

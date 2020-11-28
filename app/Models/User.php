@@ -59,4 +59,8 @@ class User extends Authenticatable
     public function vacations(){
         return $this->hasMany(Vacation::class);
     }
+
+    public function department(){
+        return $this->belongsTo(Department::class);
+    }
 }

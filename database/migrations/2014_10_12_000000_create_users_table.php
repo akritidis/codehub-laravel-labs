@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->foreignId('dep_id')->references('id')->on('departments');
             $table->rememberToken();
             $table->timestamps();
         });
