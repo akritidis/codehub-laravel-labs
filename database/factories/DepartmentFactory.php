@@ -2,18 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
-use App\Models\Vacation;
+use App\Models\Department;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class VacationFactory extends Factory
+class DepartmentFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Vacation::class;
+    protected $model = Department::class;
 
     /**
      * Define the model's default state.
@@ -23,9 +22,7 @@ class VacationFactory extends Factory
     public function definition()
     {
         return [
-            'from' => $this->faker->dateTimeBetween('now','+30 days'),
-            'to' => $this->faker->dateTimeBetween('+30 days','+300 days'),
-            'user_id' => User::inRandomOrder()->first()->id
+            'name' => $this->faker->unique()->word()
         ];
     }
 }
