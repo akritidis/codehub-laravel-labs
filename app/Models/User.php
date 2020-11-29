@@ -17,8 +17,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'firstname',
-        'lastname',
+        'firstName',
+        'lastName',
         'email',
         'password',
     ];
@@ -49,18 +49,18 @@ class User extends Authenticatable
     }
 
     public function getFullNameAttribute() {
-        return "{$this->attributes['firstname']} {$this->attributes['lastname']}";
+        return "{$this->attributes['firstName']} {$this->attributes['lastName']}";
     }
 
-    public function skills(){
-        return $this->belongsToMany(Skill::class,'users_skills');
+    public function skills() {
+        return $this->belongsToMany(Skill::class, 'users_skills');
     }
 
-    public function vacations(){
+    public function vacations() {
         return $this->hasMany(Vacation::class);
     }
 
-    public function department(){
+    public function department() {
         return $this->belongsTo(Department::class);
     }
 }

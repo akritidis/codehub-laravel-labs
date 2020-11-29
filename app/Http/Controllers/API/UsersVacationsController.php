@@ -1,72 +1,85 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
-use App\Http\Requests\VacationsStoreRequest;
-use App\Http\Requests\VacationsUpdateRequest;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\VacationResource;
-use App\Models\Vacation;
 use App\Models\User;
+use App\Models\Vacation;
+use App\Http\Requests\UsersVacations\StoreRequest;
+use App\Http\Requests\UsersVacations\UpdateRequest;
 
-class UsersVacationsController extends Controller
-{
+class UsersVacationsController extends Controller {
     /**
-     * Get a list of vacations
+     * Get a specific user's vacations
+     *
+     * @param User $user
      *
      * @return \Illuminate\Http\JsonResponse
      */
     public function index(User $user) {
-        $vacations = $user->vacations;
+        $user->load('vacations');
+
+        $vacations = VacationResource::collection($user->vacations);
+
         return response()->json(compact('vacations'));
     }
 
     /**
-     * Get a single vacation
+     * Show a user's vacation details
      *
+     * @param User     $user
      * @param Vacation $vacation
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(Vacation $vacation) {
+    public function show(User $user, Vacation $vacation) {
         $vacation = new VacationResource($vacation);
+
         return response()->json(compact('vacation'));
     }
 
     /**
-     * Create a new vacation
+     * Attach a new vacation to a user
      *
+     * @param User         $user
      * @param StoreRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(VacationsStoreRequest $request) {
-        $vacation = Vacation::create($request->only('from', 'to', 'user_id'));
-        return response()->json(compact('vacation'), 201);
+    public function store(User $user, StoreRequest $request) {
+        $user->vacations()->create($request->only('from', 'to'));
+
+        return response()->json(null, 201);
     }
 
     /**
-     * Update a specific vacation
+     * Update a user's vacation
      *
+     * @param User          $user
+     * @param Vacation      $vacation
      * @param UpdateRequest $request
-     * @param Vacation    $vacation
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(VacationsUpdateRequest $request, Vacation $vacation) {
-        $vacation->update($request->only('from', 'to', 'user_id'));
+    public function update(User $user, Vacation $vacation, UpdateRequest $request) {
+        $vacation->update($request->only('from', 'to'));
+
         return response()->json(null, 204);
     }
 
     /**
-     * Delete a specific vacation
+     * Delete a user's vacation
      *
+     * @param User     $user
      * @param Vacation $vacation
      *
      * @return \Illuminate\Http\JsonResponse
      * @throws \Exception
      */
-    public function destroy(Vacation $vacation) {
+    public function destroy(User $user, Vacation $vacation) {
         $vacation->delete();
+
         return response()->json(null, 204);
     }
 }

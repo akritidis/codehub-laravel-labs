@@ -15,14 +15,6 @@ class DepartmentSeeder extends Seeder
      */
     public function run()
     {
-        $departments = Department::factory()->times(5)->create();
-
-        $users = User::all();
-
-        $users->each(function($user) use ($departments) {
-            $ids = $departments->random(5)->pluck('id');
-
-            $user->skills()->sync($ids);
-        });
+        Department::factory()->times(10)->has(User::factory())->create();
     }
 }

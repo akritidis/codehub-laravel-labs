@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
-use App\Models\User;
 use App\Models\Department;
-use Illuminate\Http\Request;
-use App\Http\Resources\UserResource;
-use App\Http\Requests\UsersDepartmentsStoreRequest;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\DepartmentResource;
+use App\Http\Requests\Department\StoreRequest;
+use App\Http\Requests\Department\UpdateRequest;
 
 class DepartmentsController extends Controller
 {
@@ -16,10 +16,8 @@ class DepartmentsController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function index() {
-        $users = UserResource::collection(User::all());
-        $count = count($users);
-
-        return response()->json(compact('users', 'count'));
+        $users = DepartmentResource::collection(Department::all());
+        return response()->json(compact('departments'));
     }
 
     /**
@@ -29,8 +27,10 @@ class DepartmentsController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(User $user) {
-        
+    public function show(Department $department) {
+        $department = new DepartmentResource($department);
+
+        return response()->json(compact('department'));
     }
 
     /**
@@ -40,8 +40,10 @@ class DepartmentsController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Department $department, User $user) {
-        
+    public function store(StoreRequest $request) {
+        $department = Department::create($request->only('title', 'manager_id'));
+
+        return response()->json(['department' => new DepartmentResource($department)], 201);
     }
 
     /**
@@ -52,9 +54,9 @@ class DepartmentsController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Department $department, User $user) {
-        $user->department()->associate($department);
-        return response()->json($user, 203);
+    public function update(Department $department, UpdateRequest $request) {
+        $department->update($request->only('title', 'manager_id'));
+        return response()->json(null, 204);
     }
 
     /**
@@ -65,8 +67,8 @@ class DepartmentsController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \Exception
      */
-    public function destroy(Department $department, User $user) {
-        $user->department()->dissociate($department);
+    public function destroy(Department $department) {
+        $department->delete();
         return response()->json(null, 204);
     }
 }
