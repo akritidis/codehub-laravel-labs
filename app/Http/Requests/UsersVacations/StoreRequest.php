@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\UsersVacations;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UsersSkillsStoreRequest extends FormRequest
+class StoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,9 @@ class UsersSkillsStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'skills' => 'required|array',
-            'skills.*' => 'integer|exists:skills,id'
+            'from' => 'required|date',
+            'to' => 'required|date|after:from',
+            'user_id' => 'required|exists:users,id',
         ];
     }
 }

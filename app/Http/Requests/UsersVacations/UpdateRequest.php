@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\UsersVacations;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UsersDepartmentsStoreRequest extends FormRequest
+class UpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class UsersDepartmentsStoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,9 @@ class UsersDepartmentsStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'from' => 'required|date',
+            'to' => 'required|date|after:from',
+            'user_id' => 'required|exists:users,id',
         ];
     }
 }

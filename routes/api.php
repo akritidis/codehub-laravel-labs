@@ -22,9 +22,10 @@ use \App\Http\Controllers\API\UsersVacationsController;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-Route::apiResource('/users', UsersController::class, ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
-Route::apiResource('/skills', SkillsController::class, ['only' => ['index', 'store', 'update', 'destroy']]);
+Route::apiResource('users', UsersController::class);
+Route::apiResource('skills', SkillsController::class)->middleware(Logger::class);
 Route::apiResource('users.skills', UsersSkillsController::class, ['only' => ['index', 'store']]);
-Route::apiResource('users.vacations', UsersVacationsController::class, ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
-Route::apiResource('departments.users', DepartmentsController::class, ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
+Route::apiResource('users.vacations', UsersVacationsController::class);
+Route::apiResource('departments', DepartmentsController::class);
+Route::apiResource('departments.users', DepartmentsUsersController::class, ['only' => ['update', 'destroy']]);
+Route::apiResource('departments.managers', DepartmentsManagersController::class, ['only' => ['update', 'destroy']]);

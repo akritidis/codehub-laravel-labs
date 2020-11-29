@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Department;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DepartmentsUpdateRequest extends FormRequest
+class StoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,8 @@ class DepartmentsUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'title' => 'required',
+            'manager_id' => 'nullable|exists:users,id'
         ];
     }
 }

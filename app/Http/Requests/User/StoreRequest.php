@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SkillsUpdateRequest extends FormRequest
+class StoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,10 @@ class SkillsUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|unique:skills,title,{$this->skills->id}'
+            'firstName' => 'required',
+            'lastName' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:8',
         ];
     }
 }

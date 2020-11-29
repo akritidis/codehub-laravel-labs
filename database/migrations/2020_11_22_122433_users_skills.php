@@ -14,8 +14,10 @@ class UsersSkills extends Migration
     public function up()
     {
         Schema::create('users_skills', function (Blueprint $table) {
-            $table->foreignId('user_id')->references('id')->on('users');
-            $table->foreignId('skill_id')->references('id')->on('skills');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->unsignedBigInteger('skill_id');
+            $table->foreign('skill_id')->references('id')->on('skills')->cascadeOnDelete();
         });
     }
 

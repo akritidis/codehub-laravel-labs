@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\UsersStoreRequest;
-use App\Http\Requests\UsersUpdateRequest;
-use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
+use App\Http\Requests\User\StoreRequest;
+use App\Http\Requests\User\UpdateRequest;
 
 class UsersController extends Controller
 {
@@ -31,6 +31,7 @@ class UsersController extends Controller
      */
     public function show(User $user) {
         $user = new UserResource($user);
+
         return response()->json(compact('user'));
     }
 
@@ -41,8 +42,9 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(UsersStoreRequest $request) {
-        $user = User::create($request->only('firstname', 'lastname', 'email', 'password'));
+    public function store(StoreRequest $request) {
+        $user = User::create($request->only('firstName', 'lastName', 'email', 'password'));
+        
         return response()->json(compact('user'), 201);
     }
 
@@ -54,8 +56,9 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(UsersUpdateRequest $request, User $user) {
+    public function update(UpdateRequest $request, User $user) {
         $user->update($request->only('firstName', 'lastName', 'email'));
+
         return response()->json(null, 204);
     }
 
@@ -69,6 +72,7 @@ class UsersController extends Controller
      */
     public function destroy(User $user) {
         $user->delete();
+
         return response()->json(null, 204);
     }
 }
